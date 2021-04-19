@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-from .utils import create_grid_around, draw_plot
+from .utils import create_grid_around, draw_plot, determine_nrows_ncols
 import torch
 
 
