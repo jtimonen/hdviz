@@ -86,7 +86,7 @@ class LineData(PlotData):
     def __repr__(self):
         desc = (
             "LineData containing %d lines, %d points for each line, "
-            "%d  dims and %d categories."
+            "%d dims and %d categories."
             % (self.num_lines, self.num_points, self.num_dims, self.num_categories)
         )
         return desc
