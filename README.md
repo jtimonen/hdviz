@@ -1,3 +1,3 @@
 # hdviz
 
-Visualization of high-dimensional data.
+Customized high-dimensional visualization in Python.
