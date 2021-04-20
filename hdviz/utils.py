@@ -3,7 +3,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def draw_plot(save_name, save_dir=".", **kwargs):
+def assert_dim(x, expected_dim):
+    L = len(x.shape)
+    msg = "expected %d-dimensional array, found %d-dimensional" % (expected_dim, L)
+    assert expected_dim == L, msg
+    return True
+
+
+def draw_plot(save_name, save_dir=".", **save_kwargs):
     """Function to be used always when a plot is to be shown or saved."""
     if save_name is None:
         plt.show()
@@ -11,7 +18,7 @@ def draw_plot(save_name, save_dir=".", **kwargs):
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)
         save_path = os.path.join(save_dir, save_name)
-        plt.savefig(save_path, **kwargs)
+        plt.savefig(save_path, **save_kwargs)
         plt.close()
 
 

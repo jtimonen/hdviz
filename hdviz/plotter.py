@@ -1,7 +1,34 @@
 from matplotlib import pyplot as plt
 import numpy as np
 from .utils import create_grid_around, draw_plot, determine_nrows_ncols
-import torch
+
+
+class Plotter:
+    """Abstract plotter class."""
+
+    def __init__(self):
+        self.save_dir = "."
+        self.data_points = []
+        self.data_lines = []
+        self.data_quiver = []
+
+    def draw(self, save_name, **save_kwargs):
+        draw_plot(save_name, self.save_dir, **save_kwargs)
+
+    def set_save_dir(self, path):
+        self.save_dir = path
+
+
+class PlotterNd(Plotter):
+    """Main high-dimensional visualization class."""
+
+    def __init__(self):
+        super().__init__()
+        self.save_dir = "."
+        super.__init__()
+
+    def plot(self):
+        print("moi")
 
 
 def plot_state_2d(model, z_samp, z_data, idx_epoch, loss, save_dir=".", **kwargs):
@@ -49,49 +76,6 @@ def plot_state_2d(model, z_samp, z_data, idx_epoch, loss, save_dir=".", **kwargs
     axs[1, 1].set_ylim(y_min, y_max)
     axs[0, 1].set_title("diffusion")
     axs[1, 0].set_title("log(KDE) forward")
-    draw_plot(fn, save_dir, **kwargs)
-
-
-def plot_state_3d(model, z_samp, z_data, idx_epoch, loss, save_dir=".", **kwargs):
-    fig = plt.figure(figsize=(13, 13))
-    H = model.H_3d
-    azim = model.azimuth_3d
-    elev = model.elevation_3d
-    ax1 = fig.add_subplot(2, 2, 1, projection="3d")
-    ax2 = fig.add_subplot(2, 2, 2, projection="3d")
-    ax1.view_init(elev=elev, azim=azim)
-    ax2.view_init(elev=elev, azim=azim)
-    ax3 = fig.add_subplot(2, 2, 3)
-    ax4 = fig.add_subplot(2, 2, 4)
-
-    ax1.scatter(z_data[:, 0], z_data[:, 1], z_data[:, 2], alpha=0.3)
-    ax1.set_xlim(-H, H)
-    ax1.set_ylim(-H, H)
-    ax1.set_zlim(-H, H)
-
-    ax2.scatter(z_samp[:, 0], z_samp[:, 1], z_samp[:, 2], color="orange", alpha=0.3)
-    ax2.set_xlim(-H, H)
-    ax2.set_ylim(-H, H)
-    ax2.set_zlim(-H, H)
-
-    ax3.scatter(z_data[:, 0], z_data[:, 1], alpha=0.7)
-    ax3.scatter(z_samp[:, 0], z_samp[:, 1], marker="x", alpha=0.7)
-    ax3.set_xlim(-H, H)
-    ax3.set_ylim(-H, H)
-
-    ax4.scatter(z_data[:, 1], z_data[:, 2], alpha=0.7)
-    ax4.scatter(z_samp[:, 1], z_samp[:, 2], marker="x", alpha=0.7)
-    ax4.set_xlim(-H, H)
-    ax4.set_ylim(-H, H)
-
-    epoch_str = "{0:04}".format(idx_epoch)
-    loss_str = "{:.5f}".format(loss)
-    title = "epoch " + epoch_str + ", valid_loss = " + loss_str
-    fn = "fig_" + epoch_str + ".png"
-    ax1.set_title(title)
-    ax2.set_title("forward")
-    ax3.set_title("dim 1 vs. dim 2")
-    ax4.set_title("dim 2 vs. dim 3")
     draw_plot(fn, save_dir, **kwargs)
 
 
@@ -152,52 +136,6 @@ def plot_sde_2d(model, z_data, z_traj, idx_epoch, save_dir=".", **kwargs):
     title = "sde trajectories, epoch = " + epoch_str
     fn = "sde_" + epoch_str + ".png"
     plt.title(title)
-    draw_plot(fn, save_dir, **kwargs)
-
-
-def plot_sde_3d(model, z_data, z_traj, idx_epoch, save_dir=".", **kwargs):
-    fig = plt.figure(figsize=(13, 13))
-    H = model.H_3d
-    azim = model.azimuth_3d
-    elev = model.elevation_3d
-    ax1 = fig.add_subplot(2, 2, 1, projection="3d")
-    ax2 = fig.add_subplot(2, 2, 2, projection="3d")
-    ax1.view_init(elev=elev, azim=azim)
-    ax2.view_init(elev=elev, azim=azim)
-
-    ax3 = fig.add_subplot(2, 2, 3)
-    ax4 = fig.add_subplot(2, 2, 4)
-    J = z_traj.shape[1]
-
-    ax1.scatter(z_data[:, 0], z_data[:, 1], z_data[:, 2], color="black", alpha=0.3)
-    ax1.set_xlim(-H, H)
-    ax1.set_ylim(-H, H)
-    ax1.set_zlim(-H, H)
-
-    ax2.set_xlim(-H, H)
-    ax2.set_ylim(-H, H)
-    ax2.set_zlim(-H, H)
-
-    ax3.scatter(z_data[:, 0], z_data[:, 1], color="black", alpha=0.7)
-    ax4.scatter(z_data[:, 1], z_data[:, 2], color="black", alpha=0.7)
-    ax3.set_xlim(-H, H)
-    ax3.set_ylim(-H, H)
-    ax4.set_xlim(-H, H)
-    ax4.set_ylim(-H, H)
-    for j in range(J):
-        ax2.plot(
-            z_traj[:, j, 0], z_traj[:, j, 1], z_traj[:, j, 2], color="red", alpha=0.7
-        )
-        ax3.plot(z_traj[:, j, 0], z_traj[:, j, 1], color="red", alpha=0.7)
-        ax4.plot(z_traj[:, j, 1], z_traj[:, j, 2], color="red", alpha=0.7)
-
-    epoch_str = "{0:04}".format(idx_epoch)
-    title = "epoch " + epoch_str
-    fn = "sde_" + epoch_str + ".png"
-    ax1.set_title(title)
-    ax2.set_title("forward")
-    ax3.set_title("dim 1 vs. dim 2")
-    ax4.set_title("dim 2 vs. dim 3")
     draw_plot(fn, save_dir, **kwargs)
 
 
