@@ -10,7 +10,7 @@ def assert_dim(x, expected_dim):
     return True
 
 
-def draw_plot(save_name, save_dir=".", **save_kwargs):
+def draw_plot(save_name, save_dir, **save_kwargs):
     """Function to be used always when a plot is to be shown or saved."""
     if save_name is None:
         plt.show()
@@ -71,7 +71,7 @@ def create_range_around(x, scaling: float = 0.1):
     LS = list()
     for d in range(0, D):
         h = scaling * (umax[d] - umin[d])
-        LS = LS + [umin[d] - h, umax[d] + h]
+        LS = LS + [[umin[d] - h, umax[d] + h]]
     return LS
 
 
