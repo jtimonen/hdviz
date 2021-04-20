@@ -1,6 +1,11 @@
 from matplotlib import pyplot as plt
 import numpy as np
-from .utils import create_grid_around, draw_plot, determine_nrows_ncols
+from .utils import (
+    create_grid_around,
+    create_range_around,
+    draw_plot,
+    determine_nrows_ncols,
+)
 
 
 class Plotter:
@@ -8,15 +13,31 @@ class Plotter:
 
     def __init__(self):
         self.save_dir = "."
-        self.data_points = []
+        self.data_points = None
         self.data_lines = []
-        self.data_quiver = []
+        self.data_quiver = None
+        self.axis_limits = None
 
     def draw(self, save_name, **save_kwargs):
         draw_plot(save_name, self.save_dir, **save_kwargs)
 
     def set_save_dir(self, path):
         self.save_dir = path
+
+    def set_axis_limits(self, axis_limits=None, square=False):
+        pointdata = self.data_points
+        if (axis_limits is None) and (pointdata is not None):
+            self.axis_limits = create_range_around(pointdata.x)
+            if square:
+                self.square_axis_limits()
+        else:
+            self.axis_limits = axis_limits
+
+    def square_axis_limits(self):
+        alims = self.axis_limits
+        if alims is None:
+            raise RuntimeError("cannot square non-existing limits!")
+        print("should square here")
 
 
 class PlotterNd(Plotter):

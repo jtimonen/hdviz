@@ -19,3 +19,5 @@ cov_html/
 *.pkl
 *.pt
 
+test-output.xml
+

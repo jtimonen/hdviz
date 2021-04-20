@@ -63,6 +63,18 @@ def create_grid_around(z, M: int, scaling: float = 0.1):
     return U_grid
 
 
+def create_range_around(x, scaling: float = 0.1):
+    """Create a range around points *x*."""
+    umin = np.amin(x, axis=0)
+    umax = np.amax(x, axis=0)
+    D = len(umax)
+    LS = list()
+    for d in range(0, D):
+        h = scaling * (umax[d] - umin[d])
+        LS = LS + [umin[d] - h, umax[d] + h]
+    return LS
+
+
 def reshape_traj(z_traj):
     n_timepoints = z_traj.shape[0]
     n_samples = z_traj.shape[1]
