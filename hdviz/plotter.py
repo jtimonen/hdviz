@@ -77,5 +77,5 @@ class Plotter:
         self, x: np.ndarray, color="red", style="-", alpha=1.0, label="lines"
     ):
         ls = LineData(x, color, style, alpha, label)
-        assert_num_dims(ps.num_dims, self.num_dims)
+        assert_num_dims(ls.num_dims, self.num_dims)
         self.line_sets += [ls]

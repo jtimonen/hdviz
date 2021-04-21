@@ -16,6 +16,7 @@ class Plotter3d(Plotter):
         self.elevation = elevation
         self.azimuth = azimuth
         self.scatter_kwargs = dict()
+        self.lines_kwargs = dict()
 
     def set_perspective(self, azimuth: float, elevation: float):
         self.azimuth = azimuth
@@ -38,8 +39,9 @@ class Plotter3d(Plotter):
         ax = fig.add_subplot(1, 1, 1, projection="3d")
         ax.view_init(elev=self.elevation, azim=self.azimuth)
 
-        # Plot points
+        # Plot points and lines
         self.plot_points(ax)
+        self.plot_lines(ax)
 
         # Set legend, title and axis limits
         ax.legend()
@@ -67,6 +69,19 @@ class Plotter3d(Plotter):
                 label=ps.label,
                 **self.scatter_kwargs
             )
+
+    def plot_lines(self, ax):
+        for ls in self.line_sets:
+            for j in range(0, ls.num_lines):
+                ax.plot(
+                    ls.x[j, :, 0],
+                    ls.x[j, :, 1],
+                    ls.x[j, :, 2],
+                    c=ls.color,
+                    linestyle=ls.style,
+                    alpha=ls.alpha,
+                    **self.lines_kwargs
+                )
 
 
 def plot_sde_3d(model, z_data, z_traj, idx_epoch, save_dir=".", **kwargs):
