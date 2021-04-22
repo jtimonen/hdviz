@@ -1,6 +1,4 @@
-import os
 import numpy as np
-from matplotlib import pyplot as plt
 
 
 def assert_dim(x, expected_dim):
@@ -8,18 +6,6 @@ def assert_dim(x, expected_dim):
     msg = "expected %d-dimensional array, found %d-dimensional" % (expected_dim, L)
     assert expected_dim == L, msg
     return True
-
-
-def draw_plot(save_name, save_dir, **save_kwargs):
-    """Function to be used always when a plot is to be shown or saved."""
-    if save_name is None:
-        plt.show()
-    else:
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
-        save_path = os.path.join(save_dir, save_name)
-        plt.savefig(save_path, **save_kwargs)
-        plt.close()
 
 
 def determine_nrows_ncols(nplots: int):
@@ -61,18 +47,6 @@ def create_grid_around(z, M: int, scaling: float = 0.1):
     xs_ = np.meshgrid(*LS)
     U_grid = np.array([x.T.flatten() for x in xs_]).T
     return U_grid
-
-
-def create_range_around(x, scaling: float = 0.1):
-    """Create a range around points *x*."""
-    umin = np.amin(x, axis=0)
-    umax = np.amax(x, axis=0)
-    D = len(umax)
-    LS = list()
-    for d in range(0, D):
-        h = scaling * (umax[d] - umin[d])
-        LS = LS + [[umin[d] - h, umax[d] + h]]
-    return LS
 
 
 def reshape_traj(z_traj):

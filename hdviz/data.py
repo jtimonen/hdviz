@@ -21,6 +21,8 @@ class PointData(PlotData):
     """
 
     def __init__(self, x: np.ndarray, color, marker, alpha, label):
+        if color is None:
+            color = "black"
         assert_dim(x, 2)
         num_objects = x.shape[0]
         super().__init__(num_objects)
@@ -39,6 +41,15 @@ class PointData(PlotData):
         )
         return desc
 
+    def set_color(self, color):
+        self.color = color
+
+    def get_range_min(self):
+        return self.x.min(0)
+
+    def get_range_max(self):
+        return self.x.max(0)
+
 
 class LineData(PlotData):
     """Data to be plotted using lines.
@@ -47,6 +58,8 @@ class LineData(PlotData):
     """
 
     def __init__(self, x: np.ndarray, color, style, alpha, label):
+        if color is None:
+            color = "black"
         assert_dim(x, 3)
         num_objects = x.shape[0]
         super().__init__(num_objects)
@@ -66,3 +79,9 @@ class LineData(PlotData):
             self.num_dims,
         )
         return desc
+
+    def get_range_min(self):
+        return self.x.min(1).min(0)
+
+    def get_range_max(self):
+        return self.x.max(1).max(0)

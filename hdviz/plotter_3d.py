@@ -1,5 +1,4 @@
 from matplotlib import pyplot as plt
-from .utils import draw_plot
 from .plotter import Plotter
 
 
@@ -22,21 +21,13 @@ class Plotter3d(Plotter):
         self.azimuth = azimuth
         self.elevation = elevation
 
-    def plot(
-        self,
-        title=None,
-        figsize=None,
-        axis_limits=None,
-        square=False,
-        save_dir=None,
-        save_name=None,
-        **kwargs
-    ):
+    def plot(self, title=None, figsize=None, axis_limits=None, square=False, ax=None):
 
         # Setup and create figure
         self.plot_setup(figsize, axis_limits, square)
-        fig = plt.figure(figsize=self.figsize)
-        ax = fig.add_subplot(1, 1, 1, projection="3d")
+        if ax is None:
+            fig = plt.figure(figsize=self.figsize)
+            ax = fig.add_subplot(1, 1, 1, projection="3d")
         ax.view_init(elev=self.elevation, azim=self.azimuth)
 
         # Plot points and lines
@@ -44,8 +35,9 @@ class Plotter3d(Plotter):
         self.plot_lines(ax)
 
         # Set legend, title and axis limits
-        ax.legend()
-        AL = self.axis_limits
+        if self.num_pointsets() > 0:
+            ax.legend()
+        AL = self.get_axis_limits()
         if AL is not None:
             ax.set_xlim(AL[0][0], AL[0][1])
             ax.set_ylim(AL[1][0], AL[1][1])
@@ -63,7 +55,7 @@ class Plotter3d(Plotter):
                 ps.x[:, 0],
                 ps.x[:, 1],
                 ps.x[:, 2],
-                c=ps.color,
+                color=ps.color,
                 marker=ps.marker,
                 alpha=ps.alpha,
                 label=ps.label,
@@ -77,7 +69,7 @@ class Plotter3d(Plotter):
                     ls.x[j, :, 0],
                     ls.x[j, :, 1],
                     ls.x[j, :, 2],
-                    c=ls.color,
+                    color=ls.color,
                     linestyle=ls.style,
                     alpha=ls.alpha,
                     **self.lines_kwargs
