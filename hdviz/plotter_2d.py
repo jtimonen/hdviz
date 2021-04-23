@@ -7,11 +7,9 @@ import numpy as np
 class Plotter2d(Plotter):
     """Main 2d visualization class."""
 
-    def __init__(self, elevation: float = 30, azimuth: float = 30):
+    def __init__(self):
         super().__init__()
         self.num_dims = 2
-        self.scatter_kwargs = dict()
-        self.lines_kwargs = dict()
 
     def plot(self, title=None, figsize=None, axis_limits=None, square=False, ax=None):
 
@@ -20,7 +18,8 @@ class Plotter2d(Plotter):
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=self.figsize)
 
-        # Plot points and lines
+        # Plot arrows, points and lines
+        self.plot_arrows(ax)
         self.plot_points(ax)
         self.plot_lines(ax)
 
@@ -36,6 +35,19 @@ class Plotter2d(Plotter):
         ax.set_xlabel("Dim 1")
         ax.set_ylabel("Dim 2")
         return ax
+
+    def plot_arrows(self, ax):
+        for qs in self.quiver_sets:
+            ax.quiver(
+                qs.x[:, 0],
+                qs.x[:, 1],
+                qs.v[:, 0],
+                qs.v[:, 1],
+                color=qs.color,
+                alpha=qs.alpha,
+                label=qs.label,
+                **self.quiver_kwargs
+            )
 
     def plot_points(self, ax):
         for ps in self.point_sets:

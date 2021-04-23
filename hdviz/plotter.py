@@ -14,6 +14,10 @@ class Plotter:
         self.point_sets = []
         self.line_sets = []
         self.quiver_sets = []
+        self.scatter_kwargs = dict()
+        self.lines_kwargs = dict()
+        self.quiver_kwargs = dict()
+
         self.figsize = (7, 7)
         self.axis_limits = None
         self.num_dims = None

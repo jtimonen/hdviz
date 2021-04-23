@@ -3,21 +3,19 @@ from .plotter import Plotter
 
 
 class Plotter3d(Plotter):
-    """Main 3d visualization class.
+    """Main 3d visualization class."""
 
-    :param azimuth: 3d plot azimuth
-    :param elevation: 3d plot elevation
-    """
-
-    def __init__(self, elevation: float = 30, azimuth: float = 30):
+    def __init__(self):
         super().__init__()
         self.num_dims = 3
-        self.elevation = elevation
-        self.azimuth = azimuth
-        self.scatter_kwargs = dict()
-        self.lines_kwargs = dict()
+        self.elevation = 30
+        self.azimuth = 30
 
     def set_perspective(self, azimuth: float, elevation: float):
+        """Set 3d perspective.
+        :param azimuth: 3d plot azimuth
+        :param elevation: 3d plot elevation
+        """
         self.azimuth = azimuth
         self.elevation = elevation
 
@@ -30,7 +28,8 @@ class Plotter3d(Plotter):
             ax = fig.add_subplot(1, 1, 1, projection="3d")
         ax.view_init(elev=self.elevation, azim=self.azimuth)
 
-        # Plot points and lines
+        # Plot arrows, points and lines
+        self.plot_arrows(ax)
         self.plot_points(ax)
         self.plot_lines(ax)
 
@@ -48,6 +47,21 @@ class Plotter3d(Plotter):
         ax.set_ylabel("Dim 2")
         ax.set_zlabel("Dim 3")
         return ax
+
+    def plot_arrows(self, ax):
+        for qs in self.quiver_sets:
+            ax.quiver(
+                qs.x[:, 0],
+                qs.x[:, 1],
+                qs.x[:, 2],
+                qs.v[:, 0],
+                qs.v[:, 1],
+                qs.v[:, 2],
+                color=qs.color,
+                alpha=qs.alpha,
+                label=qs.label,
+                **self.quiver_kwargs
+            )
 
     def plot_points(self, ax):
         for ps in self.point_sets:
