@@ -44,3 +44,20 @@ def test_mixed_plot():
     assert a.num_pointsets() == 1
     assert a.num_linesets() == 1
     # a.plot(title="Hei")
+
+
+def test_quiver_plot():
+    x1 = np.random.normal(loc=[-1, -1], size=(100, 2))
+    x2 = np.random.normal(loc=[-10, 3], size=(100, 2))
+    x3 = np.random.normal(loc=[3, 2], size=(100, 2))
+    a = hdviz.Plotter2d()
+    a.add_pointset(x1)
+    a.add_pointset(x2)
+    a.add_pointset(x3)
+    u = a.create_grid_around_points(square=False)
+    v1 = np.sin(u[:, 0])
+    v2 = np.cos(u[:, 1] + 0.1 * u[:, 0])
+    v = np.vstack((v1, v2)).T
+    a.add_quiverset(u, v, color="red")
+    b = a.plot(square=True)
+    assert str(b)[0:11] == "AxesSubplot"

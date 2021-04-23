@@ -25,10 +25,10 @@ def determine_nrows_ncols(nplots: int):
     return nrows, ncols
 
 
-def create_grid_around(z, M: int, scaling: float = 0.1):
+def create_grid_around(x, M: int, scaling: float = 0.1):
     """Create a uniform rectangular grid around points *z*.
-    :param z: a numpy array of shape *[n_points, d]*
-    :type z: np.ndarray
+    :param x: a numpy array of shape *[n_points, D]*
+    :type x: np.ndarray
     :param M: number of points per dimension
     :type M: int
     :param scaling: How much larger should the grid be than the range of *z* for each
@@ -37,16 +37,22 @@ def create_grid_around(z, M: int, scaling: float = 0.1):
     :return: a numpy array of shape *[M^d, d]*
     :rtype: np.ndarray
     """
-    umin = np.amin(z, axis=0)
-    umax = np.amax(z, axis=0)
-    D = len(umax)
+    amin = np.amin(x, axis=0)
+    amax = np.amax(x, axis=0)
+    return create_grid(amin, amax, M, scaling)
+
+
+def create_grid(axis_ranges_min, axis_ranges_max, M, scaling=0.1):
+    amin = axis_ranges_min
+    amax = axis_ranges_max
+    D = len(amax)
     LS = list()
     for d in range(0, D):
-        h = scaling * (umax[d] - umin[d])
-        LS = LS + [np.linspace(umin[d] - h, umax[d] + h, M)]
+        h = scaling * (amax[d] - amin[d])
+        LS = LS + [np.linspace(amin[d] - h, amax[d] + h, M)]
     xs_ = np.meshgrid(*LS)
-    U_grid = np.array([x.T.flatten() for x in xs_]).T
-    return U_grid
+    x_grid = np.array([y.T.flatten() for y in xs_]).T
+    return x_grid
 
 
 def reshape_traj(z_traj):
@@ -54,3 +60,9 @@ def reshape_traj(z_traj):
     n_samples = z_traj.shape[1]
     n_dimensions = z_traj.shape[2]
     return z_traj.view(n_timepoints * n_samples, n_dimensions)
+
+
+def square_axis_limits(ax_limits):
+    D = ax_limits.shape[0]
+    ran = np.array([ax_limits.min(), ax_limits.max()])
+    return ran.repeat(D).reshape(-1, D).T

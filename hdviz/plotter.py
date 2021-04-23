@@ -1,6 +1,7 @@
 import numpy as np
-from .data import PointData, LineData
+from .data import PointData, LineData, QuiverData
 from .colors import category_palette
+from .utils import create_grid, square_axis_limits
 
 
 def assert_num_dims(D1, D2):
@@ -79,8 +80,7 @@ class Plotter:
         amax = amax + scale_margin * (amax - amin)
         a = np.vstack((amin, amax)).T
         if square:
-            D = a.shape[0]
-            a = a.max(0).repeat(D).reshape(-1, D).T
+            a = square_axis_limits(a)
         return a.tolist()
 
     def get_axis_limits(self):
@@ -106,6 +106,16 @@ class Plotter:
         assert_num_dims(ls.num_dims, self.num_dims)
         self.line_sets += [ls]
 
+    def add_quiverset(
+        self, x: np.ndarray, v: np.ndarray, color=None, alpha=1.0, label=None
+    ):
+        if label is None:
+            label = "arrows %d" % (self.num_quiversets() + 1)
+        # TODO: allow creation by passing only x and a function that computes v from x
+        qs = QuiverData(x, v, color, alpha, label)
+        assert_num_dims(qs.num_dims, self.num_dims)
+        self.quiver_sets += [qs]
+
     def get_pointrange(self):
         if self.num_pointsets() == 0:
             raise RuntimeError("no pointsets defined!")
@@ -126,3 +136,10 @@ class Plotter:
         mins = np.vstack([qs.get_range_min() for qs in self.quiver_sets]).min(0)
         maxs = np.vstack([qs.get_range_max() for qs in self.quiver_sets]).max(0)
         return mins, maxs
+
+    def create_grid_around_points(self, M: int = 30, square=True, scaling: float = 0.1):
+        ar = self.create_axis_limits(square, scale_margin=0.0)
+        ar = np.array(ar)
+        amin = ar[:, 0].tolist()
+        amax = ar[:, 1].tolist()
+        return create_grid(amin, amax, M, scaling)

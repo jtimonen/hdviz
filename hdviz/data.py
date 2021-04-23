@@ -119,7 +119,7 @@ class QuiverData(PlotData):
         return desc
 
     def get_range_min(self):
-        return self.x.min(1).min(0)
+        return self.x.min(0)
 
     def get_range_max(self):
-        return self.x.max(1).max(0)
+        return self.x.max(0)

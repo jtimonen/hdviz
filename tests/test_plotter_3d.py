@@ -49,3 +49,16 @@ def test_mixed_plot():
     assert a.num_pointsets() == 1
     assert a.num_linesets() == 1
     # a.plot(title="Hei")
+
+
+def test_quiver_plot():
+    l1 = create_3d_spiral(1.0)
+    l2 = create_3d_spiral(1.5)
+    x = np.stack((l1, l2))
+    a = hdviz.Plotter3d()
+    a.add_lineset(x, label="lines", alpha=0.3)
+    x2 = np.random.normal(size=(10, 3))
+    a.add_pointset(x2, marker="x", color="red")
+    assert a.num_pointsets() == 1
+    assert a.num_linesets() == 1
+    # a.plot(title="Hei")
