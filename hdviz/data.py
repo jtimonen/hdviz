@@ -85,3 +85,41 @@ class LineData(PlotData):
 
     def get_range_max(self):
         return self.x.max(1).max(0)
+
+
+class QuiverData(PlotData):
+    """Data to be plotted using arrows.
+    :param x: numpy array of shape (num_arrows, num_dims)
+    :type x: np.ndarray
+    :param v: numpy array of shape (num_arrows, num_dims)
+    :type v: np.ndarray
+    """
+
+    def __init__(self, x: np.ndarray, v: np.ndarray, color, alpha, label):
+        if color is None:
+            color = "gray30"
+        assert_dim(x, 2)
+        assert_dim(v, 2)
+        assert x.shape == v.shape, "x and v must have same shape!"
+        num_objects = x.shape[0]
+        super().__init__(num_objects)
+        self.num_arrows = num_objects
+        self.num_dims = x.shape[1]
+        self.x = x
+        self.v = v
+        self.color = color
+        self.alpha = alpha
+        self.label = label
+
+    def __repr__(self):
+        desc = "<QuiverData (%d arrows, " "%d dims)>" % (
+            self.num_arrows,
+            self.num_dims,
+        )
+        return desc
+
+    def get_range_min(self):
+        return self.x.min(1).min(0)
+
+    def get_range_max(self):
+        return self.x.max(1).max(0)

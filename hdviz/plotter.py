@@ -29,11 +29,17 @@ class Plotter:
     def num_linesets(self):
         return len(self.line_sets)
 
+    def num_quiversets(self):
+        return len(self.quiver_sets)
+
     def pointset_names(self):
         return [ps.name for ps in self.point_sets]
 
     def lineset_names(self):
         return [ls.name for ls in self.line_sets]
+
+    def quiverset_names(self):
+        return [qs.name for qs in self.quiver_sets]
 
     def recolor_pointsets(self):
         N = self.num_pointsets()
@@ -57,12 +63,14 @@ class Plotter:
             self.axis_limits = axis_limits
 
     def create_axis_limits(self, square=True, scale_margin=0.1):
-        if self.num_pointsets() > 0:
+        if self.num_quiversets() > 0:
+            amin, amax = self.get_quiverrange()
+        elif self.num_pointsets() > 0:
             amin, amax = self.get_pointrange()
         elif self.num_linesets() > 0:
             amin, amax = self.get_linerange()
         else:
-            raise RuntimeError("No points or lines added!")
+            raise RuntimeError("No points, lines, or arrows added!")
         amin = amin - scale_margin * (amax - amin)
         amax = amax + scale_margin * (amax - amin)
         a = np.vstack((amin, amax)).T
@@ -106,4 +114,11 @@ class Plotter:
             raise RuntimeError("no linesets defined!")
         mins = np.vstack([ls.get_range_min() for ls in self.line_sets]).min(0)
         maxs = np.vstack([ls.get_range_max() for ls in self.line_sets]).max(0)
+        return mins, maxs
+
+    def get_quiverrange(self):
+        if self.num_quiversets() == 0:
+            raise RuntimeError("no quiversets defined!")
+        mins = np.vstack([qs.get_range_min() for qs in self.quiver_sets]).min(0)
+        maxs = np.vstack([qs.get_range_max() for qs in self.quiver_sets]).max(0)
         return mins, maxs
