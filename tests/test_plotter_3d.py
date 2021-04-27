@@ -35,7 +35,6 @@ def test_line_plot():
     a.add_lineset(x, label="lines", alpha=0.8)
     assert a.num_pointsets() == 0
     assert a.num_linesets() == 1
-    # a.plot(title="Hei")
 
 
 def test_mixed_plot():
@@ -48,17 +47,16 @@ def test_mixed_plot():
     a.add_pointset(x2, marker="x", color="red")
     assert a.num_pointsets() == 1
     assert a.num_linesets() == 1
-    # a.plot(title="Hei")
 
 
 def test_quiver_plot():
-    l1 = create_3d_spiral(1.0)
-    l2 = create_3d_spiral(1.5)
-    x = np.stack((l1, l2))
     a = hdviz.Plotter3d()
-    a.add_lineset(x, label="lines", alpha=0.3)
-    x2 = np.random.normal(size=(10, 3))
-    a.add_pointset(x2, marker="x", color="red")
-    assert a.num_pointsets() == 1
-    assert a.num_linesets() == 1
-    # a.plot(title="Hei")
+    x = np.random.normal(size=(10, 3))
+    a.add_pointset(x, marker="x", color="red")
+    u = a.create_grid_around_points(square=False, M=8)
+    v1 = np.sin(u[:, 0])
+    v2 = np.cos(u[:, 1] + 0.1 * u[:, 0])
+    v3 = 0.1 * u[:, 2]
+    v = np.vstack((v1, v2, v3)).T
+    a.add_quiverset(u, v, color="blue", alpha=0.5)
+    assert a.num_quiversets() == 1
