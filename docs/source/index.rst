@@ -10,6 +10,8 @@ Welcome to hdviz's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: hdviz
+   :members:
 
 
 Indices and tables

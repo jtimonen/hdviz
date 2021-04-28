@@ -27,6 +27,7 @@ def determine_nrows_ncols(nplots: int):
 
 def create_grid_around(x, M: int, scaling: float = 0.1):
     """Create a uniform rectangular grid around points *z*.
+
     :param x: a numpy array of shape *[n_points, D]*
     :type x: np.ndarray
     :param M: number of points per dimension

@@ -91,6 +91,7 @@ class Plotter:
     def add_pointset(
         self, x: np.ndarray, color=None, marker="o", alpha=1.0, label=None
     ):
+        """Add a point set."""
         if label is None:
             label = "points %d" % (self.num_pointsets() + 1)
         ps = PointData(x, color, marker, alpha, label)
@@ -100,6 +101,7 @@ class Plotter:
             self.recolor_pointsets()
 
     def add_lineset(self, x: np.ndarray, color=None, style="-", alpha=1.0, label=None):
+        """Add a line set."""
         if label is None:
             label = "lines %d" % (self.num_linesets() + 1)
         ls = LineData(x, color, style, alpha, label)
@@ -109,6 +111,7 @@ class Plotter:
     def add_quiverset(
         self, x: np.ndarray, v: np.ndarray, color=None, alpha=1.0, label=None
     ):
+        """Add an arrows set."""
         if label is None:
             label = "arrows %d" % (self.num_quiversets() + 1)
         # TODO: allow creation by passing only x and a function that computes v from x
@@ -143,3 +146,39 @@ class Plotter:
         amin = ar[:, 0].tolist()
         amax = ar[:, 1].tolist()
         return create_grid(amin, amax, M, scaling)
+
+    def add_pointsets(
+        self,
+        x: np.ndarray,
+        categories,
+        labels=None,
+        colors=None,
+        marker="o",
+        alpha: float = 1.0,
+        categ_prefix: str = "group",
+    ):
+        """Add multiple point sets.
+
+        :param x: a numpy array  of shape (n_points, n_dims)
+        :type x: np.ndarray
+        :param categories: an integer numpy array of length n_points
+        :type categories: np.ndarray
+        :param labels: Label of each category. Must be a dictionary where categories
+        are keys and label strings are values.
+        :param colors: Color of each category. Must be a dictionary where categories
+        are keys and colors are values.
+        :param marker: point marker
+        :param alpha: point  opacity
+        :param categ_prefix: prefix for categories if labels is None
+        """
+        ucat = np.unique(categories)
+        for u in ucat:
+            inds = np.where(categories == u)[0]
+            xu = x[inds, :]
+            label = (categ_prefix + " %d" % u) if (labels is None) else labels[u]
+            color = None if (colors is None) else colors[u]
+            ps = PointData(xu, color, marker, alpha, label)
+            assert_num_dims(ps.num_dims, self.num_dims)
+            self.point_sets += [ps]
+        if colors is None:
+            self.recolor_pointsets()
