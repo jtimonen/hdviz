@@ -34,4 +34,5 @@ jobs:
         flake8 . --count --show-source --statistics
     - name: Test with pytest
       run: |
+        pip install git+https://github.com/jtimonen/hdviz.git
         pytest
