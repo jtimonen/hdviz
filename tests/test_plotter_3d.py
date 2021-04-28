@@ -1,4 +1,4 @@
-# Test creation of PlotData objects
+# Test plotting 3-dimensional things
 import hdviz
 import numpy as np
 import pytest
