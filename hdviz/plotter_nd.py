@@ -137,16 +137,3 @@ class PlotterNd(Plotter):
                             **self.lines_kwargs
                         )
                 counter += 1
-
-
-def plot_state_nd(
-    model, z_samp, z_data, idx_epoch, loss, panel_size=None, save_dir=".", **kwargs
-):
-    """Pair plot with all dimension pairs."""
-    alpha = 0.5
-    d = z_data.shape[1]
-
-    # save
-    epoch_str = "{0:04}".format(idx_epoch)
-    save_name = "fig_" + epoch_str + ".png"
-    draw_plot(save_name, save_dir, **kwargs)
