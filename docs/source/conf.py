@@ -21,8 +21,14 @@ project = "hdviz"
 copyright = "2021, Juho Timonen"
 author = "Juho Timonen"
 
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:
+    import importlib_metadata
+
 # The full version, including alpha/beta/rc tags
-release = "0.0.2"
+pkg_name = project
+release = importlib_metadata.version(pkg_name)
 
 
 # -- General configuration ---------------------------------------------------

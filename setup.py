@@ -11,7 +11,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="hdviz",
-    version="0.0.2",
+    version="0.0.3",
     author="Juho Timonen",
     author_email="juho.timonen@iki.fi",
     description="High-dimensional visualization.",
