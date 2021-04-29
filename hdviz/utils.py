@@ -1,4 +1,6 @@
 import numpy as np
+import os
+from matplotlib import pyplot as plt
 
 
 def assert_dim(x, expected_dim):
@@ -56,14 +58,20 @@ def create_grid(axis_ranges_min, axis_ranges_max, M, scaling=0.1):
     return x_grid
 
 
-def reshape_traj(z_traj):
-    n_timepoints = z_traj.shape[0]
-    n_samples = z_traj.shape[1]
-    n_dimensions = z_traj.shape[2]
-    return z_traj.view(n_timepoints * n_samples, n_dimensions)
-
-
 def square_axis_limits(ax_limits):
     D = ax_limits.shape[0]
     ran = np.array([ax_limits.min(), ax_limits.max()])
     return ran.repeat(D).reshape(-1, D).T
+
+
+def draw_plot(save_name, save_dir=".", **save_kwargs):
+    """Function to shown or save the current figure."""
+    if save_name is None:
+        plt.show()
+    else:
+        if not os.path.isdir(save_dir):
+            print(save_dir + " doesn't exist, creating it")
+            os.mkdir(save_dir)
+        save_path = os.path.join(save_dir, save_name)
+        plt.savefig(save_path, **save_kwargs)
+        plt.close()
