@@ -8,18 +8,18 @@ class Plotter3d(Plotter):
     def __init__(self):
         super().__init__()
         self.num_dims = 3
+        self.azimuth = -60
         self.elevation = 30
-        self.azimuth = 30
 
     def set_perspective(self, azimuth: float, elevation: float):
         """Set 3d perspective.
-        :param azimuth: 3d plot azimuth
-        :param elevation: 3d plot elevation
+        :param azimuth: Azimuthal viewing angle (default = -60).
+        :param elevation: Elevation viewing angle (default = 30).
         """
         self.azimuth = azimuth
         self.elevation = elevation
 
-    def plot(self, title=None, figsize=None, axis_limits=None, square=False, ax=None):
+    def plot(self, figsize=None, axis_limits=None, square=False, ax=None, title=None):
 
         # Setup and create figure
         self.plot_setup(figsize, axis_limits, square)

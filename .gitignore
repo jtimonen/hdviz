@@ -18,6 +18,7 @@ cov_html/
 *.ckpt
 *.pkl
 *.pt
+*.pyc
 
 test-output.xml
 

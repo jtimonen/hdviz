@@ -10,20 +10,28 @@ def assert_dim(x, expected_dim):
     return True
 
 
-def determine_nrows_ncols(nplots: int):
+def determine_nrows_ncols(nplots: int, nrows=None, ncols=None):
     """Determine number of rows and columns a grid of subplots.
+
     :param nplots: total number of subplots
-    :type nplots: int
+    :param ncols: (optional) number of columns
+    :param nrows: (optional) number of rows
     """
-    if nplots < 4:
-        ncols = nplots
-    elif nplots < 5:
-        ncols = 2
-    elif nplots < 10:
-        ncols = 3
+    if (nrows is None) and (ncols is None):
+        if nplots < 4:
+            ncols = nplots
+        elif nplots < 5:
+            ncols = 2
+        elif nplots < 10:
+            ncols = 3
+        elif nplots < 29:
+            ncols = 4
+        else:
+            ncols = 5
+    if ncols is None:
+        ncols = int(np.ceil(nplots / nrows))
     else:
-        ncols = 4
-    nrows = int(np.ceil(nplots / ncols))
+        nrows = int(np.ceil(nplots / ncols))
     return nrows, ncols
 
 
@@ -64,7 +72,7 @@ def square_axis_limits(ax_limits):
     return ran.repeat(D).reshape(-1, D).T
 
 
-def draw_plot(save_name, save_dir=".", **save_kwargs):
+def draw_plot(save_name=None, save_dir=".", **save_kwargs):
     """Function to shown or save the current figure."""
     if save_name is None:
         plt.show()

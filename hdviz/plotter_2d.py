@@ -9,7 +9,7 @@ class Plotter2d(Plotter):
         super().__init__()
         self.num_dims = 2
 
-    def plot(self, title=None, figsize=None, axis_limits=None, square=False, ax=None):
+    def plot(self, figsize=None, axis_limits=None, square=False, ax=None, title=None):
 
         # Setup and create figure
         self.plot_setup(figsize, axis_limits, square)

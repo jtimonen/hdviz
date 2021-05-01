@@ -9,8 +9,10 @@ def test_plot_3d():
     a = hdviz.PlotterNd(3)
     a.add_pointset(x, label="points", alpha=0.7)
     assert a.num_pointsets() == 1
-    fig, ax = a.plot(figsize=(7, 10), square=True)
-    assert len(ax) == 3
+    ax = a.plot(panelsize=2, square=True)
+    assert ax.shape == (1, 3)
+    with pytest.raises(RuntimeError):
+        a.plot(figsize=(7, 10))
     a.clear_data()
     with pytest.raises(RuntimeError):
         a.get_pointrange()
@@ -28,7 +30,7 @@ def test_plot_4d():
     lin = np.stack((y1, y2, y3, y4)).T
     ls = np.stack((lin, lin + 0.5))
     a.add_lineset(ls, color="red")
-    fig, ax = a.plot()
+    ax = a.plot(panelsize=3)
     assert ax.shape == (2, 3)
 
 
@@ -44,5 +46,5 @@ def test_plot_5d():
     f5 = 0.0 * t
     v = np.stack((f1, f2, f3, f4, f5)).T
     a.add_quiverset(x, v, color="black")
-    fig, ax = a.plot(figsize=(10, 10))
+    ax = a.plot()
     assert ax.shape == (3, 4)
