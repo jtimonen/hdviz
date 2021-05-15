@@ -4,6 +4,12 @@ from .colors import category_palette
 from .utils import create_grid, square_axis_limits
 
 
+def inf_range(D):
+    mins = np.full(shape=D, fill_value=np.inf)
+    maxs = np.full(shape=D, fill_value=-np.inf)
+    return mins, maxs
+
+
 def assert_num_dims(D1, D2):
     assert D1 == D2, "number of dimensions should be %d, but found %d" % (D2, D1)
 
@@ -68,14 +74,8 @@ class Plotter:
             self.axis_limits = axis_limits
 
     def create_axis_limits(self, square=True, scale_margin=0.1):
-        if self.num_quiversets() > 0:
-            amin, amax = self.get_quiverrange()
-        elif self.num_pointsets() > 0:
-            amin, amax = self.get_pointrange()
-        elif self.num_linesets() > 0:
-            amin, amax = self.get_linerange()
-        else:
-            raise RuntimeError("No points, lines, or arrows added!")
+        amin, amax = self.get_max_ranges()
+        # todo: informative error if ranges are (-inf, inf)
         amin = amin - scale_margin * (amax - amin)
         amax = amax + scale_margin * (amax - amin)
         a = np.vstack((amin, amax)).T
@@ -121,24 +121,36 @@ class Plotter:
 
     def get_pointrange(self):
         if self.num_pointsets() == 0:
-            raise RuntimeError("no pointsets defined!")
+            return inf_range(self.num_dims)
         mins = np.vstack([ps.get_range_min() for ps in self.point_sets]).min(0)
         maxs = np.vstack([ps.get_range_max() for ps in self.point_sets]).max(0)
         return mins, maxs
 
     def get_linerange(self):
         if self.num_linesets() == 0:
-            raise RuntimeError("no linesets defined!")
+            return inf_range(self.num_dims)
         mins = np.vstack([ls.get_range_min() for ls in self.line_sets]).min(0)
         maxs = np.vstack([ls.get_range_max() for ls in self.line_sets]).max(0)
         return mins, maxs
 
     def get_quiverrange(self):
         if self.num_quiversets() == 0:
-            raise RuntimeError("no quiversets defined!")
+            return inf_range(self.num_dims)
         mins = np.vstack([qs.get_range_min() for qs in self.quiver_sets]).min(0)
         maxs = np.vstack([qs.get_range_max() for qs in self.quiver_sets]).max(0)
         return mins, maxs
+
+    def get_all_ranges(self):
+        r1, R1 = self.get_pointrange()
+        r2, R2 = self.get_linerange()
+        r3, R3 = self.get_quiverrange()
+        mins = np.vstack((r1, r2, r3))
+        maxs = np.vstack((R1, R2, R3))
+        return mins, maxs
+
+    def get_max_ranges(self):
+        mins, maxs = self.get_all_ranges()
+        return mins.min(0), maxs.max(0)
 
     def create_grid_around_points(self, M: int = 30, square=True, scaling: float = 0.1):
         ar = self.create_axis_limits(square, scale_margin=0.0)

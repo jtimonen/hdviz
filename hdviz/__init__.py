@@ -3,7 +3,7 @@ from .utils import create_grid_around, draw_plot
 from .examples import example
 
 # Version defined here
-__version__ = "0.0.6"
+__version__ = "0.0.8"
 
 __all__ = [
     "create_plotter",

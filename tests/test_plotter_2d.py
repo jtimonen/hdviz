@@ -20,8 +20,6 @@ def test_point_plot():
     b = a.plot(title="Hei", square=False)
     assert str(b)[0:11] == "AxesSubplot"
     a.clear_data()
-    with pytest.raises(RuntimeError):
-        a.get_pointrange()
 
 
 def test_line_plot():

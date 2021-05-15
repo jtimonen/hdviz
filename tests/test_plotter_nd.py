@@ -14,8 +14,7 @@ def test_plot_3d():
     with pytest.raises(RuntimeError):
         a.plot(figsize=(7, 10))
     a.clear_data()
-    with pytest.raises(RuntimeError):
-        a.get_pointrange()
+    # todo test: that data was cleared
 
 
 def test_plot_4d():

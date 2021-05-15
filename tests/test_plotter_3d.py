@@ -25,8 +25,6 @@ def test_point_plot():
     b = a.plot(title="Hei", square=True)
     assert str(b)[0:13] == "Axes3DSubplot"
     a.clear_data()
-    with pytest.raises(RuntimeError):
-        a.get_pointrange()
 
 
 def test_line_plot():
