@@ -6,7 +6,7 @@ import pytest
 
 def test_plot_3d():
     x = np.random.normal(size=(100, 3))
-    a = hdviz.create_plotter(3)
+    a = hdviz.create_plotter(3, no_3d=True)
     a.add_pointset(x, label="points", alpha=0.7)
     assert a.num_pointsets() == 1
     ax = a.plot(panelsize=2, square=True)

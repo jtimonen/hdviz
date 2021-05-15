@@ -15,15 +15,19 @@ def determine_dimension(points, trajectories):
     return D
 
 
-def create_plotter(D: int):
+def create_plotter(D: int, no_3d: bool = False):
     """Create a plotter that can be customized.
 
     :param D: dimension
     :type D: int
+    :param no_3d: don't create 3d plots even if D=3
+    :type no_3d: bool
     """
     if D == 2:
         return Plotter2d()
     elif D == 3:
+        if no_3d:
+            return PlotterNd(num_dims=3)
         return Plotter3d()
     else:
         return PlotterNd(num_dims=D)
