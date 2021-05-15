@@ -6,7 +6,7 @@ import pytest
 
 def test_plot_3d():
     x = np.random.normal(size=(100, 3))
-    a = hdviz.PlotterNd(3)
+    a = hdviz.create_plotter(3)
     a.add_pointset(x, label="points", alpha=0.7)
     assert a.num_pointsets() == 1
     ax = a.plot(panelsize=2, square=True)
@@ -20,7 +20,7 @@ def test_plot_3d():
 
 def test_plot_4d():
     x = np.random.normal(size=(100, 4))
-    a = hdviz.PlotterNd(4)
+    a = hdviz.create_plotter(4)
     a.add_pointset(x, label="points", alpha=0.7)
     t = -2.0 + 4.0 * np.linspace(0, 1, 100)
     y1 = t
@@ -36,7 +36,7 @@ def test_plot_4d():
 
 def test_plot_5d():
     x = np.random.normal(size=(100, 5))
-    a = hdviz.PlotterNd(5)
+    a = hdviz.create_plotter(5)
     a.add_pointset(x, label="points", alpha=0.7, color="pink")
     t = -2.0 + 4.0 * np.linspace(0, 1, 100)
     f1 = t

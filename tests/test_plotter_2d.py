@@ -15,7 +15,7 @@ def create_2d_spiral(a: float = 1):
 
 def test_point_plot():
     x = np.random.normal(size=(100, 2))
-    a = hdviz.Plotter2d()
+    a = hdviz.create_plotter(2)
     a.add_pointset(x)
     b = a.plot(title="Hei", square=False)
     assert str(b)[0:11] == "AxesSubplot"
@@ -26,7 +26,7 @@ def test_point_plot():
 
 def test_line_plot():
     x = np.random.normal(size=(10, 100, 2))
-    a = hdviz.Plotter2d()
+    a = hdviz.create_plotter(2)
     a.add_lineset(x, label="lines", alpha=0.8)
     assert a.num_pointsets() == 0
     assert a.num_linesets() == 1
@@ -37,7 +37,7 @@ def test_mixed_plot():
     l1 = create_2d_spiral(1.0)
     l2 = create_2d_spiral(1.5)
     x = np.stack((l1, l2))
-    a = hdviz.Plotter2d()
+    a = hdviz.create_plotter(2)
     a.add_lineset(x, label="lines", alpha=0.3)
     x2 = np.random.normal(size=(10, 2))
     a.add_pointset(x2, marker="x", color="red")
@@ -50,7 +50,7 @@ def test_quiver_plot():
     x1 = np.random.normal(loc=[-1, -1], size=(100, 2))
     x2 = np.random.normal(loc=[-10, 3], size=(100, 2))
     x3 = np.random.normal(loc=[3, 2], size=(100, 2))
-    a = hdviz.Plotter2d()
+    a = hdviz.create_plotter(2)
     a.add_pointset(x1)
     a.add_pointset(x2)
     a.add_pointset(x3)

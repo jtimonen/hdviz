@@ -4,7 +4,7 @@ import numpy as np
 
 
 def test_adding_pointsets():
-    a = hdviz.Plotter3d()
+    a = hdviz.create_plotter(3)
     x = 1.5 + 0.1 * np.random.normal(size=(100, 3))
     a.add_pointset(x, label="first group", marker="x")
     x = np.random.normal(size=(100, 3))

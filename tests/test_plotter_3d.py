@@ -15,7 +15,7 @@ def create_3d_spiral(a: float = 1):
 
 def test_point_plot():
     x = np.random.normal(size=(100, 3))
-    a = hdviz.Plotter3d()
+    a = hdviz.create_plotter(3)
     a.add_pointset(x, label="example_data", alpha=0.3)
     x2 = np.random.normal(size=(10, 3))
     a.add_pointset(x2, label="example_other", marker="x", color="red")
@@ -31,7 +31,7 @@ def test_point_plot():
 
 def test_line_plot():
     x = np.random.normal(size=(10, 100, 3))
-    a = hdviz.Plotter3d()
+    a = hdviz.create_plotter(3)
     a.add_lineset(x, label="lines", alpha=0.8)
     assert a.num_pointsets() == 0
     assert a.num_linesets() == 1
@@ -41,7 +41,7 @@ def test_mixed_plot():
     l1 = create_3d_spiral(1.0)
     l2 = create_3d_spiral(1.5)
     x = np.stack((l1, l2))
-    a = hdviz.Plotter3d()
+    a = hdviz.create_plotter(3)
     a.add_lineset(x, label="lines", alpha=0.3)
     x2 = np.random.normal(size=(10, 3))
     a.add_pointset(x2, marker="x", color="red")
@@ -50,7 +50,7 @@ def test_mixed_plot():
 
 
 def test_quiver_plot():
-    a = hdviz.Plotter3d()
+    a = hdviz.create_plotter(3)
     x = np.random.normal(size=(10, 3))
     a.add_pointset(x, marker="x", color="red")
     u = a.create_grid_around_points(square=False, M=8)
