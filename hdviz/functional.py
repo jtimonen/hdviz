@@ -42,6 +42,9 @@ def visualize(
     trajectories=None,
     xlim=None,
     ylim=None,
+    scatter_kwargs=None,
+    quiver_kwargs=None,
+    lines_kwargs=None,
     save_name=None,
     save_dir=".",
     **save_kwargs
@@ -49,6 +52,12 @@ def visualize(
     """Main function."""
     D = determine_dimension(points, trajectories)
     ptr = create_plotter(D)
+    if scatter_kwargs is not None:
+        ptr.scatter_kwargs = scatter_kwargs
+    if lines_kwargs is not None:
+        ptr.lines_kwargs = lines_kwargs
+    if quiver_kwargs is not None:
+        ptr.quiver_kwargs = quiver_kwargs
     if points is not None:
         ptr.add_pointsets(points, categories=categories, labels=labels, alpha=0.7)
     if u is not None:
