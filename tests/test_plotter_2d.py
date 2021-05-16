@@ -1,7 +1,6 @@
 # Test plotting 2-dimensional things
 import hdviz
 import numpy as np
-import pytest
 
 
 def create_2d_spiral(a: float = 1):

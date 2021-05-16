@@ -1,7 +1,6 @@
 # Test plotting 3-dimensional things
 import hdviz
 import numpy as np
-import pytest
 
 
 def create_3d_spiral(a: float = 1):
