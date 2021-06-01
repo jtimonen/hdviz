@@ -16,8 +16,10 @@ class Plotter3d(Plotter):
         :param azimuth: Azimuthal viewing angle (default = -60).
         :param elevation: Elevation viewing angle (default = 30).
         """
-        self.azimuth = azimuth
-        self.elevation = elevation
+        if azimuth is not None:
+            self.azimuth = azimuth
+        if elevation is not None:
+            self.elevation = elevation
 
     def plot(self, figsize=None, axis_limits=None, square=False, ax=None, title=None):
 

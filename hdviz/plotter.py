@@ -162,9 +162,9 @@ class Plotter:
     def add_pointsets(
         self,
         x: np.ndarray,
-        categories,
-        labels=None,
-        colors=None,
+        labels,
+        label_names=None,
+        label_colors=None,
         marker="o",
         alpha: float = 1.0,
         categ_prefix: str = "group",
@@ -173,24 +173,28 @@ class Plotter:
 
         :param x: a numpy array  of shape (n_points, n_dims)
         :type x: np.ndarray
-        :param categories: an integer numpy array of length n_points
-        :type categories: np.ndarray
-        :param labels: Label of each category. Must be a dictionary where categories
+        :param labels: an integer numpy array of length n_points
+        :type labels: np.ndarray
+        :param label_names: Label of each category. Must be a dictionary where
+        categories
         are keys and label strings are values.
-        :param colors: Color of each category. Must be a dictionary where categories
+        :param label_colors: Color of each category. Must be a dictionary where
+        categories
         are keys and colors are values.
         :param marker: point marker
         :param alpha: point  opacity
         :param categ_prefix: prefix for categories if labels is None
         """
-        ucat = np.unique(categories)
+        ucat = np.unique(labels)
         for u in ucat:
-            inds = np.where(categories == u)[0]
+            inds = np.where(labels == u)[0]
             xu = x[inds, :]
-            label = (categ_prefix + " %d" % u) if (labels is None) else labels[u]
-            color = None if (colors is None) else colors[u]
+            label = (
+                (categ_prefix + " %d" % u) if (label_names is None) else label_names[u]
+            )
+            color = None if (label_colors is None) else label_colors[u]
             ps = PointData(xu, color, marker, alpha, label)
             assert_num_dims(ps.num_dims, self.num_dims)
             self.point_sets += [ps]
-        if colors is None:
+        if label_colors is None:
             self.recolor_pointsets()
