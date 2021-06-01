@@ -167,7 +167,7 @@ class Plotter:
         label_colors=None,
         marker="o",
         alpha: float = 1.0,
-        categ_prefix: str = "group",
+        label_name_prefix: str = "group",
     ):
         """Add multiple point sets.
 
@@ -183,14 +183,16 @@ class Plotter:
         are keys and colors are values.
         :param marker: point marker
         :param alpha: point  opacity
-        :param categ_prefix: prefix for categories if labels is None
+        :param label_name_prefix: prefix for label names if label_names is None
         """
         ucat = np.unique(labels)
         for u in ucat:
             inds = np.where(labels == u)[0]
             xu = x[inds, :]
             label = (
-                (categ_prefix + " %d" % u) if (label_names is None) else label_names[u]
+                (label_name_prefix + " %d" % u)
+                if (label_names is None)
+                else label_names[u]
             )
             color = None if (label_colors is None) else label_colors[u]
             ps = PointData(xu, color, marker, alpha, label)
